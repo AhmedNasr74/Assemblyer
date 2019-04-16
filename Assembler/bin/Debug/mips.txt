@@ -1,0 +1,39 @@
+.data
+	fibs: .space 12
+	size: .word 12
+	one: .word 1
+	four: .word 4
+.text
+	or $t0, $zero, $zero
+	lw $t5, size ($zero)
+	lw $t8, one ($zero)
+	lw $t9, four ($zero)
+	add $t2, $zero, $t8
+	sw $t2, 0($t0)
+	sw $t2, 4($t0)
+	sub $t1, $t5, $t8
+	sub $t1, $t1, $t8
+	loop: lw $t3, 0($t0)
+	lw $t4, 4($t0)
+	add $t2, $t3, $t4
+	sw $t2, 8($t0)
+	add $t0, $t0, $t9
+	sub $t1, $t1, $t8
+	slt $at, $zero, $t1
+	beq $at, $zero, exit
+	j loop
+	exit: and $a0, $zero, $a0
+	add $a1, $zero, $t5
+	j output
+	ret: sub $s0, $s0, $t8
+	output: and $t0, $t0, $zero
+	for: add $t1, $t0, $t0
+	add $t1, $t1, $t1
+	add $t2, $a0, $t1
+	lw $s0, 0($t2)
+	add $t0, $t0, $t8
+	slt $at, $t0, $a1
+	bne $at, $zero, for
+	nor $t8, $zero, $zero
+	nor $s0, $s0, $t8
+	exit2: j ret
